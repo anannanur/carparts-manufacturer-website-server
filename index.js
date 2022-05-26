@@ -26,6 +26,11 @@ const run = async () => {
             res.send("Server is Running");
         });
         
+        //API to get all parts
+        app.get("/parts", async (req, res) => {
+            const parts = await partsCollection.find({}).toArray();
+            res.send(parts);
+        });
 
        
 
