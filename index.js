@@ -137,6 +137,13 @@ const run = async () => {
             res.send(orders);
         });
 
+        //API to post order
+        app.post("/orders", async (req, res) => {
+            const order = req.body;
+            const result = await ordersCollection.insertOne(order);
+            res.send(result);
+        })
+
         app.put('/parts/:id', async (req, res) => {
             const id = req.params.id
             const updateProduct = req.body
