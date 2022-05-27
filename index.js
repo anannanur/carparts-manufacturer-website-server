@@ -97,7 +97,13 @@ const run = async () => {
             const getToken = jwt.sign({ email: email }, process.env.TOKEN, { expiresIn: '1d' })
             res.send({ result, getToken })
         })
-        
+
+        ////API to get all orders
+        app.get("/orders", async (req, res) => {
+            const orders = await ordersCollection.find({}).toArray();
+            res.send(orders);
+        });
+
         app.put('/tools/:id', async (req, res) => {
             const id = req.params.id
             const updateProduct = req.body
@@ -113,6 +119,7 @@ const run = async () => {
             const result = await partsCollection.updateOne(query, updateDoc, options)
             res.send(result)
         })
+
 
     } finally {
         // client.close(); 
