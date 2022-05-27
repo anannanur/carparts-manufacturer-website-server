@@ -161,7 +161,28 @@ const run = async () => {
             res.send(updatedOrder);
         });
 
-        
+        //Update a part
+        app.patch("/parts/:id", verifyJWT, verifyAdmin, async (req, res) => {
+            const decodedEmail = req.decoded.email;
+            const email = req.headers.email;
+            if (decodedEmail) {
+                const id = req.params.id
+                const newParts = req.body
+                const query = { _id: ObjectId(id) }
+                const product = await partsCollection.findOne(query)          
+                const options = { upsert: true };
+                const updateDoc = {
+                    $set: newParts
+                }
+                const result = await partsCollection.updateOne(query, updateDoc, options)
+                res.send(result);
+            } else {
+                res.send("Unauthorized access");
+            }
+        });
+
+
+
         app.put('/parts/:id', async (req, res) => {
             const id = req.params.id
             const updateProduct = req.body
