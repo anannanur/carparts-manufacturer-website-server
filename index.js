@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 
 require("dotenv").config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const port = process.env.PORT || 9000;
 const app = express();
@@ -60,26 +61,49 @@ const run = async () => {
             const item = await partsCollection.findOne(query)
             res.send(item)
         })
-       
-        //Update a part
-        app.patch("/parts/:id", verifyJWT, verifyAdmin, async (req, res) => {
-            const decodedEmail = req.decoded.email;
-            const email = req.headers.email;
-            if (decodedEmail) {
-                const id = req.params.id
-                const newParts = req.body
-                const query = { _id: ObjectId(id) }
-                const product = await partsCollection.findOne(query)
-                //  console.log(product,'prd');
-                const options = { upsert: true };
-                const updateDoc = {
-                    $set: newParts
-                }
-                const result = await partsCollection.updateOne(query, updateDoc, options)
-                res.send(result);
+        //Verify Admin Role 
+        const verifyAdmin = async (req, res, next) => {
+            const requester = req.decoded.email;
+            const requesterAccount = await userCollection.findOne({
+                email: requester,
+            });
+            if (requesterAccount.role === "admin") {
+                next();
             } else {
-                res.send("Unauthorized access");
+                res.status(403).send({ message: "Forbidden" });
             }
+        };
+       
+        // //Update a part
+        // app.patch("/parts/:id", verifyJWT, verifyAdmin, async (req, res) => {
+        //     const decodedEmail = req.decoded.email;
+        //     const email = req.headers.email;
+        //     if (decodedEmail) {
+        //         const id = req.params.id
+        //         const newParts = req.body
+        //         const query = { _id: ObjectId(id) }
+        //         const product = await partsCollection.findOne(query)
+        //         //  console.log(product,'prd');
+        //         const options = { upsert: true };
+        //         const updateDoc = {
+        //             $set: newParts
+        //         }
+        //         const result = await partsCollection.updateOne(query, updateDoc, options)
+        //         res.send(result);
+        //     } else {
+        //         res.send("Unauthorized access");
+        //     }
+        // });
+
+        //API to make Admin 
+        app.put("/user/admin/:email", verifyJWT, verifyAdmin, async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const updateDoc = {
+                $set: { role: "admin" },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
         });
 
         //create user
@@ -104,7 +128,7 @@ const run = async () => {
             res.send(orders);
         });
 
-        app.put('/tools/:id', async (req, res) => {
+        app.put('/parts/:id', async (req, res) => {
             const id = req.params.id
             const updateProduct = req.body
             // console.log(updateProduct);
