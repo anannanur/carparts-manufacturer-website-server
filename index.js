@@ -95,17 +95,6 @@ const run = async () => {
         //     }
         // });
 
-        //API to make Admin 
-        app.put("/user/admin/:email", verifyJWT, verifyAdmin, async (req, res) => {
-            const email = req.params.email;
-            const filter = { email: email };
-            const updateDoc = {
-                $set: { role: "admin" },
-            };
-            const result = await userCollection.updateOne(filter, updateDoc);
-            res.send(result);
-        });
-
         //create user
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
@@ -121,6 +110,26 @@ const run = async () => {
             const getToken = jwt.sign({ email: email }, process.env.TOKEN, { expiresIn: '1d' })
             res.send({ result, getToken })
         })
+
+        //API to make Admin 
+        app.put("/user/admin/:email", verifyJWT, verifyAdmin, async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const updateDoc = {
+                $set: { role: "admin" },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
+
+        //API to get admin 
+        app.get("/admin/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user?.role === "admin";
+            res.send({ admin: isAdmin });
+        });
+
 
         ////API to get all orders
         app.get("/orders", async (req, res) => {
