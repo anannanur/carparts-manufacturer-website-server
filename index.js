@@ -144,6 +144,24 @@ const run = async () => {
             res.send(result);
         })
 
+
+        //API to update a order 
+        app.put("/orders/:id", async (req, res) => {
+            const orderId = req.params.id;
+            const order = req.body;
+            const query = { _id: ObjectId(orderId) };
+            const options = { upsert: true };
+            const updatedOrder = await ordersCollection.findOneAndUpdate(
+                query,
+                {
+                    $set: order,
+                },
+                options
+            );
+            res.send(updatedOrder);
+        });
+
+        
         app.put('/parts/:id', async (req, res) => {
             const id = req.params.id
             const updateProduct = req.body
