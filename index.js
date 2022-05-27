@@ -181,7 +181,33 @@ const run = async () => {
             }
         });
 
-
+        //API to update a user
+        app.put("/user/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            console.log("user", user);
+            const query = {
+                email: email
+            };
+            const options = {
+                upsert: true,
+            };
+            const updatedDoc = {
+                $set: {
+                    displayName: user?.displayName,
+                    photoURL: user?.photoURL,
+                    number: user?.number,
+                    address: user?.address,
+                    institute: user?.institute
+                },
+            };
+            const result = await userCollection.updateOne(
+                query,
+                updatedDoc,
+                options
+            );
+            res.send(result);
+        });
 
         app.put('/parts/:id', async (req, res) => {
             const id = req.params.id
