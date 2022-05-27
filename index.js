@@ -2,6 +2,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
 
 
 require("dotenv").config();
@@ -49,12 +50,49 @@ const run = async () => {
         });
 
         app.get('/parts/:id', async (req, res) => {
-            const id = req.params.id;
+            const id = req.params.id
             const query = { _id: ObjectId(id) }
             const item = await partsCollection.findOne(query)
             res.send(item)
         })
        
+        //Update a part
+        app.patch("/parts/:id", verifyJWT, verifyAdmin, async (req, res) => {
+            const decodedEmail = req.decoded.email;
+            const email = req.headers.email;
+            if (decodedEmail) {
+                const id = req.params.id
+                const newParts = req.body
+                const query = { _id: ObjectId(id) }
+                const product = await partsCollection.findOne(query)
+                //  console.log(product,'prd');
+                const options = { upsert: true };
+                const updateDoc = {
+                    $set: newParts
+                }
+                const result = await partsCollection.updateOne(query, updateDoc, options)
+                res.send(result);
+            } else {
+                res.send("Unauthorized access");
+            }
+        });
+
+
+        app.put('/tools/:id', async (req, res) => {
+            const id = req.params.id
+            const updateProduct = req.body
+            // console.log(updateProduct);
+            const query = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    availableQuantity: updateProduct.newQuantity
+                }
+            }
+
+            const result = await partsCollection.updateOne(query, updateDoc, options)
+            res.send(result)
+        })
 
     } finally {
         // client.close(); 
