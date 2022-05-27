@@ -37,6 +37,11 @@ const run = async () => {
         console.log("Connected to MongoDB");
         const db = client.db("carparts");
         const partsCollection = db.collection("partsCollection");
+        const ordersCollection = db.collection("ordersCollection");
+        const userCollection = db.collection("userCollection");
+        const reviewsCollection = db.collection("reviewsCollection");
+        const adminCollection = db.collection("adminCollection");
+        const paymentCollection = db.collection("paymentCollection");
 
         // API to Run Server 
         app.get("/", async (req, res) => {
