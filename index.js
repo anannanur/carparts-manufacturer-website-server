@@ -225,6 +225,19 @@ const run = async () => {
             res.send(result)
         })
 
+        //API to delete a order ADMIN
+        app.delete("/order/:id", verifyJWT, verifyAdmin, async (req, res) => {
+            const decodedEmail = req.decoded.email;
+            const id = req.params.id;
+            const email = req.headers.email;
+            if (decodedEmail) {
+
+                const result = await ordersCollection.deleteOne({ _id: ObjectId(id) });
+                res.send(result);
+            } else {
+                res.send("Unauthorized access");
+            }
+        });
 
     } finally {
         // client.close(); 
