@@ -113,12 +113,6 @@ const run = async () => {
             res.send(parts);
         });
 
-        //API to get tools by id
-        // app.get("/tools/:id", async (req, res) => {
-        //     const id = req.params.id;
-        //     const tool = await toolsCollection.findOne({ _id: ObjectId(id) });
-        //     res.send(tool);
-        // });
 
         //API to get tools by id
         app.get('/parts/:id', async (req, res) => {
@@ -285,11 +279,6 @@ const run = async () => {
             res.send(orders);
         });
 
-        //API to get all reviews 
-        // app.get("/reviews", async (req, res) => {
-        //     const reviews = await reviewsCollection.find({}).toArray();
-        //     res.send(reviews);
-        // });
 
         //API to get all reviews 
         app.get("/reviews", async (req, res) => {
@@ -303,19 +292,6 @@ const run = async () => {
             const result = await reviewsCollection.insertOne(newReview);
             res.send(result)
         })
-
-        //API to post a review 
-        // app.post("/review", verifyJWT, async (req, res) => {
-        //     const decodedEmail = req.decoded.email;
-        //     const email = req.headers.email;
-        //     if (email === decodedEmail) {
-        //         const review = req.body;
-        //         await reviewsCollection.insertOne(review);
-        //         res.send(review);
-        //     } else {
-        //         res.send("Unauthorized access");
-        //     }
-        // });
 
         //API to post a product 
         app.post("/product", verifyJWT, verifyAdmin, async (req, res) => {
@@ -337,41 +313,6 @@ const run = async () => {
             res.send(result)
         })
 
-        //API delete a product 
-        // app.delete("/tools/:id", verifyJWT, async (req, res) => {
-        //     const decodedEmail = req.decoded.email;
-        //     const email = req.headers.email;
-        //     if (email === decodedEmail) {
-        //         const id = req.params.id;
-        //         await toolsCollection.deleteOne({ _id: ObjectId(id) });
-        //         res.send("Deleted");
-        //     } else {
-        //         res.send("Unauthorized access");
-        //     }
-        // });
-
-        //API to update a tool
-        // app.put("/tools/:id", verifyJWT, async (req, res) => {
-        //     const decodedEmail = req.decoded.email;
-        //     const email = req.headers.email;
-        //     if (email === decodedEmail) {
-        //         const id = req.params.id;
-        //         const product = req.body;
-        //         const options = { upsert: true };
-        //         await toolsCollection.updateOne(
-        //             { _id: ObjectId(id) },
-        //             {
-        //                 $set: {
-        //                     availableQuantity: product.newQuantity
-        //                 }
-        //             },
-        //             options
-        //         );
-        //         res.send(product);
-        //     } else {
-        //         res.send("Unauthorized access");
-        //     }
-        // });
 
         //API to get all user
         app.get('/user', verifyJWT, async (req, res) => {
@@ -401,25 +342,6 @@ const run = async () => {
                 res.send("Unauthorized access");
             }
         })
-
-        //API to get user by user email
-        // app.get('/user', verifyJWT, async (req, res) => {
-        //     const decodedEmail = req.decoded.email
-        //     console.log('decodedEmail', decodedEmail);
-        //     const email = req.query.email;
-        //     console.log("email", email);
-        //     if (email === decodedEmail) {
-        //         const query = { email: email }
-        //         const cursor = userCollection.find(query)
-        //         const user = await cursor.toArray()
-        //         res.send(user)
-        //     }
-        //     else {
-        //         // console.log(param);
-        //         return res.status(403).send({ message: 'forbidden access' })
-
-        //     }
-        // })
 
 
         app.put('/parts/:id', async (req, res) => {
