@@ -1,12 +1,12 @@
 # CarParts Manufacture Website
 
 
-Live site:-[CarParts]()
+Live site:-[CarParts](https://assignment-12-197bc.web.app/)
 
 
 # Back-end
 
-API:-[Backend]()
+API:-[Backend](https://vast-journey-16295.herokuapp.com/)
 
 
 ## Description:
