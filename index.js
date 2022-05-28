@@ -102,10 +102,7 @@ const run = async () => {
             res.send({ accessToken });
         });
 
-        // API to Run Server 
-        app.get("/", async (req, res) => {
-            res.send("Server is Running");
-        });
+        
 
         //API to get all tools 
         app.get("/parts", async (req, res) => {
@@ -445,5 +442,10 @@ const run = async () => {
 };
 
 run().catch(console.dir);
+
+// API to Run Server 
+app.get("/", async (req, res) => {
+    res.send("Server is Running");
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
