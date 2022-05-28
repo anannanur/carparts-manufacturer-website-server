@@ -1,4 +1,4 @@
-# CarParts Manufacture Website
+# CarParts Manufacturer Website
 
 
 Live site:-[CarParts](https://assignment-12-197bc.web.app/)
